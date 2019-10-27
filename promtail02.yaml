@@ -6,21 +6,21 @@ positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: http://loki:3100/loki/api/v1/push
+  - url: http://loki:3100/api/prom/push
 
 scrape_configs:
-- job_name: system
+- job_name: es02-log
   static_configs:
   - targets:
       - localhost
     labels:
-      job: varlogs
-      __path__: /var/log/*log
-- job_name: es02
+      job: es02-log
+      __path__: /var/log/elasticsearch/*log
+- job_name: es02-json
   static_configs:
   - targets:
       - localhost
     labels:
-      job: es02
+      job: es02-json
       __path__: /var/log/elasticsearch/*json
 

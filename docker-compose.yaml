@@ -13,7 +13,7 @@ volumes:
 
 services:
     loki:
-        image: 'grafana/loki:latest'
+        image: 'grafana/loki:master'
         ports:
             - '3100:3100'
         command: '-config.file=/etc/loki/local-config.yaml'
@@ -35,19 +35,18 @@ services:
             - cluster.name=docker-cluster
             - bootstrap.memory_lock=true
             - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-            - 'path.logs=/var/log/elasticsearch/'
         ulimits:
             memlock: {soft: -1, hard: -1}
         volumes:
             - '/Users/dzhdanov/git/deniszh/loki-sidecar-test/es-log4j2.properties:/usr/share/elasticsearch//config/log4j2.properties'
             - 'esdata01:/usr/share/elasticsearch/data'
-            - 'eslogs01:/var/log/elasticsearch'
+            - 'eslogs01:/usr/share/elasticsearch/logs'
         ports:
             - '9200:9200'
         networks:
             - loki
     promtail01:
-        image: 'grafana/promtail:latest'
+        image: 'grafana/promtail:master'
         volumes:
             - '/Users/dzhdanov/git/deniszh/loki-sidecar-test/promtail01.yaml:/etc/promtail/docker-config.yaml'
             - 'eslogs01:/var/log/elasticsearch'
@@ -63,18 +62,17 @@ services:
             - 'cluster.initial_master_nodes=es01,es02'
             - cluster.name=docker-cluster
             - bootstrap.memory_lock=true
-            - 'path.logs=/var/log/elasticsearch/'
             - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
         ulimits:
             memlock: {soft: -1, hard: -1}
         volumes:
             - '/Users/dzhdanov/git/deniszh/loki-sidecar-test/es-log4j2.properties:/usr/share/elasticsearch//config/log4j2.properties'
             - 'esdata02:/usr/share/elasticsearch/data'
-            - 'eslogs02:/var/log/elasticsearch'
+            - 'eslogs02:/usr/share/elasticsearch/logs'
         networks:
             - loki
     promtail02:
-        image: 'grafana/promtail:latest'
+        image: 'grafana/promtail:master'
         volumes:
             - '/Users/dzhdanov/git/deniszh/loki-sidecar-test/promtail02.yaml:/etc/promtail/docker-config.yaml'
             - 'eslogs02:/var/log/elasticsearch'
